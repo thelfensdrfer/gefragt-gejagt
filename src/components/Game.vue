@@ -29,9 +29,9 @@
             </template>
             <template v-else-if="$store.state.round === 3">
                 <div class="mx-auto flex flex-col max-w-6xl mx-auto">
-                    <div class="bg-cyan-900 flex flex-row justify-end border-2 border-b-0 border-black">
-                        <div>
-                            00:00
+                    <div class="bg-cyan-500 flex flex-row justify-end border-2 border-black">
+                        <div class="bg-cyan-900 text-6xl px-4 py-2">
+                            {{ $store.getters.getRoundThreeCountdown }}
                         </div>
                     </div>
                     <div class="flex flex-row text-6xl text-center font-bold">

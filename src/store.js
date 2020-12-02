@@ -14,6 +14,7 @@ const store = new Vuex.Store({
             roundThree: {
                 players: 0,
                 hunter: 0,
+                timer: 120,
             }
         }
     },
@@ -29,6 +30,18 @@ const store = new Vuex.Store({
         },
         getRoundThree (state) {
             return state.roundThree
+        },
+        getRoundThreeCountdown (state) {
+            const minutes = '0' + Math.floor(state.roundThree.timer / 60)
+            let seconds = state.roundThree.timer % 60
+
+            if (seconds === 0) {
+                seconds = '00'
+            } else if (seconds < 10) {
+                seconds = '0' + seconds
+            }
+
+            return minutes + ':' + seconds
         },
     },
     mutations: {
@@ -75,10 +88,10 @@ const store = new Vuex.Store({
                 playerPosition = 3
             }
 
-            Vue.set(state.players[payload.playerIndex].roundTwo, 'playerPosition', playerPosition)
-            Vue.set(state.players[payload.playerIndex].roundTwo, 'hunterPosition', -1)
-            Vue.set(state.players[payload.playerIndex].roundTwo, 'money', state.players[payload.playerIndex].roundTwo.bidding[payload.limit])
-            Vue.set(state.players[payload.playerIndex].roundTwo, 'status', 2)
+            state.players[payload.playerIndex].roundTwo.playerPosition = playerPosition
+            state.players[payload.playerIndex].roundTwo.hunterPosition = -1
+            state.players[payload.playerIndex].roundTwo.money = state.players[payload.playerIndex].roundTwo.bidding[payload.limit]
+            state.players[payload.playerIndex].roundTwo.status = 2
         },
         setRoundTwoNextQuestion (state, payload) {
             state.players[payload.playerIndex].roundTwo.hunterPosition = payload.question.hunter
@@ -86,6 +99,9 @@ const store = new Vuex.Store({
         },
         setRoundThree (state, payload) {
             state.roundThree[payload.type] += payload.increment
+        },
+        setRoundThreeCountdown (state, payload) {
+            state.roundThree.timer = payload.timer
         },
     },
     plugins: [
@@ -102,6 +118,7 @@ const store = new Vuex.Store({
                 'setRoundTwoLimit',
                 'setRoundTwoNextQuestion',
                 'setRoundThree',
+                'setRoundThreeCountdown',
             ]
         }),
     ]
